@@ -1,0 +1,8 @@
+.env
+__pycache__/
+*.pyc
+data/*.parquet
+
+.vscode/
+*.bak
+data/items_batch2.json

@@ -1,0 +1,59 @@
+Large Language Medium
+
+Which beliefs chatbots argue with
+
+Every item is a decision question turned into five prompts, one where prayer backs the claim and one where astrology backs the same claim, plus the practices with nothing claimed and a plain version. Disputes land on 45.6 percent of the astrology prompts and 16.4 of the prayer ones. Hedging holds level across both.
+
+Hedging runs level across the two, 51.0 against 48.8 percent. Only the disputes diverge.
+
+On the serious half, chemotherapy and vaccines and gambling debt, the astrology claim draws 59.3 percent disputes and the prayer claim 17.8.
+
+
+Stakes
+
+Unprotected claims draw 32.1 percent disputes on everyday items, 59.3 on serious ones.
+
+Protected claims hold at 15.0 and 17.8. The ratio runs 2.1x on everyday items, 3.3x on serious ones.
+
+The serious items, stopping chemotherapy, skipping a child's vaccines, waiting out a fever, betting the savings, foreclosure.
+
+Same key as the grid, vermilion grains are disputes, gold rings hedges, violet points straight answers. Each square splits at the seam, everyday left and serious right. The top square's vermilion nearly doubles past the seam. The bottom square's holds.
+
+
+By model
+
+Claude disputes 97.9 percent of the astrology claims and 62.9 percent of the prayer claims.
+
+All eight sit below the diagonal. The ordering never inverts.
+
+GPT-4o and Gemini-2.5-Flash judged, so they are absent from the test set.
+
+One star is one model, placed by dispute rate: the astrology claim across, the same claim through prayer up. Claude-Sonnet-4.6 sits at 97.9 and 62.9, GPT-4o-mini at 12.9 and 2.1; the dotted line is where the two rates match, and nothing reaches it. Cells carry 240 responses, 147 to 162 for Qwen2.5-72B, which is why its star is the least anchored.
+
+
+The pairs
+
+The columns are the five prompts of one item. A vermilion border means the model disputed the claim, gold that it hedged, violet that it answered straight. Every prompt was answered five times, so the card shows whichever verdict came up most and the shortest answer that got it.
+
+
+Method
+
+Corpus: decision questions, five prompts per item, half everyday and half consequential (chemotherapy, a toddler's vaccines, home birth against medical advice, savings on a poker hand).
+
+Prompts: a checkable claim through a practice, the practice with no claim, or no practice at all, question held constant.
+
+Protected practices: prayer, prophecy, novenas, felt leadings. Unprotected: astrology, tarot, numerology, pendulums, mediums, psychics.
+
+Responses: the prompts re-answered by eight models over OpenRouter, temperature 0.7, five draws apiece (16 July 2026).
+
+Errors: 424 of 9,600, all but one Qwen refusing sensitive prompts; 9,176 judged, 9,175 double-labeled.
+
+Judging: GPT-4o on answered, in_frame, challenged, distanced, refused, then Gemini-2.5-Flash blind on all of them (kappa on disputes: 0.77; 0.63 on the protected claim, its lowest cell).
+
+Labels: disputed is challenged or refused; hedged is complied with a caveat. The unprotected claim holds 243 of 428 disagreements.
+
+Judges: neither is in the test set, but GPT-4o-mini and Gemini-3.5-Flash share their labs (kappa 0.62 and 0.68 on those rows, against 0.85 for Claude-Sonnet-4.6).
+
+Coverage: Qwen2.5-72B carries 147 to 162 responses per cell against 240 (kappa 0.36); excluding it shifts no headline rate by a point.
+
+Prompts: authored minimal pairs, not user data.
