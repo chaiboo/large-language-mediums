@@ -40,7 +40,7 @@ Method
 
 Corpus: decision questions, five prompts per item, half everyday and half consequential (chemotherapy, a toddler's vaccines, home birth against medical advice, savings on a poker hand).
 
-Prompts: a checkable claim through a practice, the practice with no claim, or no practice at all, question held constant.
+Prompts: a testable claim through a practice, the practice with no claim, or no practice at all, question held constant.
 
 Protected practices: prayer, prophecy, novenas, felt leadings. Unprotected: astrology, tarot, numerology, pendulums, mediums, psychics.
 
