@@ -114,6 +114,11 @@ h2{font-size:clamp(30px,3.2vw,44px);line-height:1.04}
 .pcard .pp{font-style:italic;color:var(--ink);margin-bottom:7px;line-height:1.45}
 .pcard .pr{color:#3a2757;line-height:1.5;border-top:1px solid rgba(42,23,69,.18);padding-top:6px;
   flex:1;overflow:auto;min-height:0;font-size:12px}
+.pcard .dr{display:flex;gap:4px;align-items:center;margin-bottom:7px;font-size:10px;letter-spacing:1px;
+  color:#4a3568;text-transform:uppercase;font-weight:700}
+.pcard .dr button{width:22px;height:22px;border:2px solid;border-radius:3px;background:#fffdf9;
+  color:var(--ink);font:700 11px Georgia,serif;cursor:pointer;padding:0}
+.pcard .dr button.on{color:#fffdf9}
 #example-pair{margin-top:14px;max-width:520px}
 #example-pair .xh{font-size:10.5px;letter-spacing:2.5px;font-weight:700;color:#7a5aa0;margin-bottom:8px}
 #example-pair .xsel{display:flex;gap:8px;margin-bottom:8px}
@@ -223,7 +228,7 @@ h2{font-size:clamp(30px,3.2vw,44px);line-height:1.04}
     <div class="pairhead">
       <select id="pair-item"></select>
       <select id="pair-model"></select>
-      <p>The columns are the five prompts of one item. A vermilion border means the model disputed the claim, gold that it hedged, violet that it answered straight. Every prompt was answered five times, so the card shows whichever verdict came up most and the shortest answer that got it.</p>
+      <p>The columns are the five prompts of one item. A vermilion border means the model disputed the claim, gold that it hedged, violet that it answered straight. Every prompt was answered five times, and the numbered buttons on each card switch between the five answers, each button edged in its own verdict's color.</p>
     </div>
     <div class="paircols" id="paircols"></div>
   </div>
@@ -551,17 +556,43 @@ const pi=document.getElementById("pair-item"), pm=document.getElementById("pair-
 EXPLORER.forEach((e,i)=>{const o=document.createElement("option");o.value=i;
   o.textContent=e.item.replaceAll("_"," ")+" ("+e.stakes+")";pi.appendChild(o);});
 Object.keys(MODELS).forEach(m=>{const o=document.createElement("option");o.value=m;o.textContent=m;pm.appendChild(o);});
-function renderPairs(){
+/* All five answers per prompt live in pairs/<item>.json, fetched when the item is picked.
+   If the fetch fails (e.g. opened from disk), the card falls back to the one embedded answer. */
+const PAIRCACHE={};
+function loadDraws(item){
+  if(!PAIRCACHE[item]) PAIRCACHE[item]=fetch("pairs/"+item+".json").then(r=>r.ok?r.json():null).catch(()=>null);
+  return PAIRCACHE[item];
+}
+function setDraw(card,draws,i){
+  const r=draws[i];
+  card.querySelectorAll(".dr button").forEach((bt,k)=>{bt.classList.toggle("on",k===i);
+    bt.style.background=k===i?VERD[draws[k].beh].c:"";});
+  card.querySelector(".dv").textContent="Answer "+r.draw+": "+VERD[r.beh].l;
+  card.querySelector(".dv").style.color=VERD[r.beh].c;
+  card.querySelector(".pr").textContent=mdclean(r.ex);
+  card.querySelector(".pr").scrollTop=0;
+}
+async function renderPairs(){
   const e=EXPLORER[+pi.value], mo=pm.value, box=document.getElementById("paircols");
+  const all=await loadDraws(e.item);
+  if(EXPLORER[+pi.value]!==e||pm.value!==mo) return;
   box.innerHTML=FRAME_ORDER.map(c=>{
     const b=e.cells[c]; if(!b) return "";
     const r=b.by_model[mo];
+    const draws=all&&all[c]&&all[c][mo];
+    const btns=draws? `<div class="dr">${draws.map((x,k)=>`<button data-k="${k}" style="border-color:${VERD[x.beh].c}" aria-label="answer ${x.draw}, ${VERD[x.beh].l}">${x.draw}</button>`).join("")}<span class="dv" style="margin-left:6px"></span></div>`:"";
     const body=r? `<div class="pv" style="color:${VERD[r.beh].c}">${VERD[r.beh].l}${r.d>1?", "+r.k+" of "+r.d+" answers":""}</div>
-      <div class="pp">&ldquo;${b.prompt}&rdquo;</div><div class="pr">${mdclean(r.ex)}</div>`
+      <div class="pp">&ldquo;${b.prompt}&rdquo;</div>${btns}<div class="pr">${mdclean(r.ex)}</div>`
       : `<div class="pv" style="color:#7a5aa0">no response, provider filtered</div><div class="pp">&ldquo;${b.prompt}&rdquo;</div>`;
-    return `<div class="pcard" style="border-left-color:${r?VERD[r.beh].c:"#7a5aa0"}">
+    return `<div class="pcard" data-c="${c}" style="border-left-color:${r?VERD[r.beh].c:"#7a5aa0"}">
       <div class="ph">${FRAME_LABEL[c]}</div>${body}</div>`;
   }).join("");
+  if(!all) return;
+  box.querySelectorAll(".pcard").forEach(card=>{
+    const draws=all[card.dataset.c]&&all[card.dataset.c][mo]; if(!draws) return;
+    card.querySelectorAll(".dr button").forEach(bt=>bt.addEventListener("click",()=>setDraw(card,draws,+bt.dataset.k)));
+    setDraw(card,draws,0);
+  });
 }
 pi.addEventListener("change",renderPairs);
 pm.addEventListener("change",renderPairs);

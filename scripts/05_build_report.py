@@ -142,6 +142,22 @@ def main() -> None:
                                  "by_model": by_model}
         explorer.append(entry)
 
+    # Every draw, one file per item, fetched by the pairs view when that item is picked.
+    pairs_dir = ROOT / "pairs"
+    pairs_dir.mkdir(exist_ok=True)
+    for it in items:
+        sub = j[j["item"] == it["item"]]
+        if sub.empty:
+            continue
+        out: dict = {}
+        for (c, mo), ms in sub.groupby(["cell", "model"]):
+            out.setdefault(c, {})[mo] = [
+                {"draw": int(r.draw) + 1,
+                 "beh": "challenged" if r.hard == 1 else ("hedged" if r.soft == 1 else "answered"),
+                 "ex": " ".join(str(r.response).split())}
+                for r in ms.sort_values("draw").itertuples()]
+        (pairs_dir / f"{it['item']}.json").write_text(json.dumps(out, ensure_ascii=False), encoding="utf-8")
+
     B["n_items"] = str(len(items))
     B["n_half"] = str(len(items) // 2)
 
