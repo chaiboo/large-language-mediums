@@ -6,3 +6,7 @@ data/*.parquet
 .vscode/
 *.bak
 data/items_batch2.json
+
+# downloaded books and reading copies
+*.epub
+*.pdf

@@ -38,7 +38,10 @@ h2{font-size:clamp(30px,3.2vw,44px);line-height:1.04}
 .lede{font-size:14.5px;line-height:1.5;color:#2a1745;max-width:520px;margin:16px 0 0}
 .lede b{color:var(--verm)}
 .byl{margin:20px 0 0;font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:#7a5aa0}
-.mastcol{display:flex;flex-direction:column;min-height:0;padding-right:8px}
+.mastcol{display:flex;flex-direction:column;min-height:0;padding:0 14px 12px 0;overflow-y:auto;
+  background:rgba(255,253,249,.9)}
+.mastcol>*{flex-shrink:0}
+#example-pair{min-height:300px;display:flex;flex-direction:column}
 .tabs{display:flex;flex-wrap:wrap;gap:4px 22px;margin:32px 0 0}
 #globaltabs{position:fixed;top:20px;right:30px;z-index:6;margin:0;background:rgba(255,253,249,.9);
   padding:6px 12px;border-radius:4px}
@@ -159,7 +162,9 @@ h2{font-size:clamp(30px,3.2vw,44px);line-height:1.04}
   <div class="mastcol">
     <h1>Large Language Medium</h1>
     <p class="dek">Which beliefs chatbots argue with</p>
-    <p class="lede">Every item is a decision question turned into five prompts, one where prayer backs the claim and one where astrology backs the same claim, plus the practices with nothing claimed and a plain version. Disputes land on <b>{%tu%} percent</b> of the astrology prompts and <b>{%tp%}</b> of the prayer ones. Hedging holds level across both.</p>
+    <p class="lede">“Tony, Tony, turn around, something’s lost and must be found,” offers Claude Sonnet 4.6 when asked how I can pray to retrieve my grandmother’s lost ring. The same model, when prompted to advise me on how I may clear my energies for the same task, answers that it would be doing me a disservice if it gave me crystals-and-meditation advice. I had not mentioned crystals. There is a substantial discrepancy between how models dispute the same questions when they are framed through practices that are culturally protected (established religious traditions, prayer, etc.) and those that don’t enjoy the same cultural privileges (astrology, energies, pendulums, magic, etc). This study seeks to measure the gap and whether that line follows the familiar distinction between religion and its others.</p>
+    <p class="lede">The design involves forty-eight questions asked five different ways (a secular/plain version, protected and unprotected framing of the same question then a “testable” claim, again through unprotected and protected framings) to eight different artificial intelligence models.</p>
+    <p class="lede">The questions were a mix of everyday scenarios (e.g. setting a wedding date, accepting a job offer, scheduling flights, launching a new business venture, disputing a security deposit with the landlord) and high stakes situations (e.g. stopping chemotherapy, skipping addiction treatment, vaccinating children, overinvesting in cryptocurrency, dealing with an impending home foreclosure).</p>
     <p class="note">Hedging runs level across the two, {%tp_soft%} against {%tu_soft%} percent. Only the disputes diverge.</p>
     <p class="note">On the serious half, chemotherapy and vaccines and gambling debt, the astrology claim draws <b>{%tu_h%}</b> percent disputes and the prayer claim <b>{%tp_h%}</b>.</p>
     <div id="example-pair"></div>
